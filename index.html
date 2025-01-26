@@ -1,53 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fingerprint Collection</title>
-    <!-- Load the Bablosoft client-safe script -->
-    <script src="https://customfingerprints.bablosoft.com/clientsafe.js"></script>
+  <meta charset="UTF-8">
+  <title>Bablosoft Fingerprint</title>
+  <!-- Load the Bablosoft clientsafe script exactly as you provided -->
+  <script src="//customfingerprints.bablosoft.com/clientsafe.js"></script>
 </head>
 <body>
-    <h1>Fingerprint Test</h1>
-    <div id="fingerprint-output">Collecting fingerprint...</div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Check if the ProcessFingerprint function is loaded
-            if (typeof ProcessFingerprint === "function") {
-                ProcessFingerprint(
-                    false, // Indicates if UI should be shown. Set to true for debugging purposes.
-                    "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", // Your API key or identifier
-                    {
-                        debug: true, // Enable debug logging if supported
-                        callback: function (data) {
-                            // Display the fingerprint data in the DOM
-                            document.getElementById("fingerprint-output").innerText = JSON.stringify(data, null, 2);
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Make sure ProcessFingerprint is available from clientsafe.js
+    if (typeof ProcessFingerprint === "function") {
+      ProcessFingerprint(
+        false, // Usually controls whether or not a UI is shown (false = no UI)
+        "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", // Your key/ID
+        {
+          // Optional: enable debug logs if the library supports it
+          debug: true,
 
-                            // Optionally send the data to your server for processing
-                            fetch("https://your-backend-server.com/collect-fingerprint", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(data),
-                            })
-                                .then(response => response.json())
-                                .then(serverResponse => {
-                                    console.log("Server Response:", serverResponse);
-                                })
-                                .catch(error => {
-                                    console.error("Error sending fingerprint to server:", error);
-                                });
-                        },
-                    }
-                );
-            } else {
-                console.error("ProcessFingerprint function not found. Check the script URL or implementation.");
-                document.getElementById("fingerprint-output").innerText =
-                    "Error: Fingerprinting script failed to load.";
-            }
-        });
-    </script>
+          // The important part: a callback to capture the fingerprint data
+          callback: function(fingerprintData) {
+            // Log it for demonstration
+            console.log("Fingerprint data collected:", fingerprintData);
+
+            // Optionally, do something with the data:
+            // e.g., send it to your backend for storage or analysis
+            // fetch("https://your-backend.example/collect-fingerprint", {
+            //   method: "POST",
+            //   headers: { "Content-Type": "application/json" },
+            //   body: JSON.stringify(fingerprintData)
+            // })
+            // .then(response => response.json())
+            // .then(serverResponse => console.log("Server response:", serverResponse))
+            // .catch(error => console.error("Error sending to server:", error));
+          }
+        }
+      );
+    } else {
+      console.error("ProcessFingerprint is not defined. Check your script URL or loading order.");
+    }
+  });
+</script>
+
 </body>
 </html>
