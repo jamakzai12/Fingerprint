@@ -2,58 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bablosoft Fingerprint Collection</title>
-  <!-- Load the Bablosoft clientsafe script exactly as given -->
+  <title>Bablosoft Fingerprint Test</title>
+  <!-- Load the Bablosoft fingerprint script exactly as you provided -->
   <script src="//customfingerprints.bablosoft.com/clientsafe.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Call ProcessFingerprint once the DOM is ready
+      ProcessFingerprint(false, "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s");
+    });
+  </script>
 </head>
 <body>
-
-<script>
-// We wrap our code in a DOMContentLoaded event to ensure the script is loaded first
-document.addEventListener("DOMContentLoaded", function() {
-
-  // 1. Check if ProcessFingerprint is actually defined
-  if (typeof ProcessFingerprint !== "function") {
-    console.error("ProcessFingerprint is not defined. Check your script URL or loading order.");
-    return;
-  }
-
-  // 2. Call ProcessFingerprint with your specific arguments
-  ProcessFingerprint(
-    false,  // "false" usually means 'do not show UI'; might vary by library version
-    "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", // Your exact ID/key
-    {
-      debug: true, // If supported, shows debug info in the console
-      callback: function(collectedData) {
-        // 3. This function runs once the fingerprint is ready. Let's log the results.
-        console.log("Fingerprint data collected:", collectedData);
-
-        // ------------------------------------------------------------------------
-        // 4. This is where you can do anything you like with `collectedData`:
-        //    - Send it to your server
-        //    - Store in a database
-        //    - Display it on the page, etc.
-        // ------------------------------------------------------------------------
-
-        // Simple example: Display in an alert (not recommended for production)
-        alert("Collected Fingerprint:\n" + JSON.stringify(collectedData, null, 2));
-
-        // Example of sending data to a backend endpoint (uncomment if needed):
-        /*
-        fetch("https://your-backend.com/collect-fingerprint", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(collectedData)
-        })
-        .then(response => response.json())
-        .then(serverResponse => console.log("Server response:", serverResponse))
-        .catch(error => console.error("Error sending data to server:", error));
-        */
-      }
-    }
-  );
-});
-</script>
-
+  <p>Open your browser’s console to check if the fingerprint is collected.</p>
 </body>
 </html>
