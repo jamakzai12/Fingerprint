@@ -3,16 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Bablosoft Fingerprint Test</title>
-  <!-- Load the Bablosoft fingerprint script exactly as you provided -->
+  <!-- Load the Bablosoft fingerprint script -->
   <script src="//customfingerprints.bablosoft.com/clientsafe.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Call ProcessFingerprint once the DOM is ready
-      ProcessFingerprint(false, "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s");
+      // Check if the function is available
+      if (typeof ProcessFingerprint !== "function") {
+        console.error("ProcessFingerprint is not defined. Check if clientsafe.js loaded correctly.");
+        return;
+      }
+
+      // Call ProcessFingerprint with a callback to see the data
+      ProcessFingerprint(false, "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", {
+        debug: true, // Enable debug logs if supported
+        callback: function(fingerprintData) {
+          // This is where you actually "collect" and see the data
+          console.log("Fingerprint data:", fingerprintData);
+
+          // If you want to send this data to your own server, uncomment below:
+          /*
+          fetch("https://your-custom-server.com/collect-fingerprint", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(fingerprintData)
+          })
+          .then(response => response.json())
+          .then(serverResponse => console.log("Server response:", serverResponse))
+          .catch(error => console.error("Error sending fingerprint:", error));
+          */
+        }
+      });
     });
   </script>
 </head>
 <body>
-  <p>Open your browser’s console to check if the fingerprint is collected.</p>
+  <p>Open the browser console to see the fingerprint data once the page loads.</p>
 </body>
 </html>
