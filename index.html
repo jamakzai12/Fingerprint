@@ -1,2 +1,53 @@
-<script src="//customfingerprints.bablosoft.com/clientsafe.js"></script>
-<script>document.addEventListener("DOMContentLoaded", function(){ProcessFingerprint(false, "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s")})</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Collection</title>
+    <!-- Load the Bablosoft client-safe script -->
+    <script src="https://customfingerprints.bablosoft.com/clientsafe.js"></script>
+</head>
+<body>
+    <h1>Fingerprint Test</h1>
+    <div id="fingerprint-output">Collecting fingerprint...</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if the ProcessFingerprint function is loaded
+            if (typeof ProcessFingerprint === "function") {
+                ProcessFingerprint(
+                    false, // Indicates if UI should be shown. Set to true for debugging purposes.
+                    "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", // Your API key or identifier
+                    {
+                        debug: true, // Enable debug logging if supported
+                        callback: function (data) {
+                            // Display the fingerprint data in the DOM
+                            document.getElementById("fingerprint-output").innerText = JSON.stringify(data, null, 2);
+
+                            // Optionally send the data to your server for processing
+                            fetch("https://your-backend-server.com/collect-fingerprint", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(data),
+                            })
+                                .then(response => response.json())
+                                .then(serverResponse => {
+                                    console.log("Server Response:", serverResponse);
+                                })
+                                .catch(error => {
+                                    console.error("Error sending fingerprint to server:", error);
+                                });
+                        },
+                    }
+                );
+            } else {
+                console.error("ProcessFingerprint function not found. Check the script URL or implementation.");
+                document.getElementById("fingerprint-output").innerText =
+                    "Error: Fingerprinting script failed to load.";
+            }
+        });
+    </script>
+</body>
+</html>
