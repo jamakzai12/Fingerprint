@@ -2,45 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bablosoft Fingerprint</title>
-  <!-- Load the Bablosoft clientsafe script exactly as you provided -->
+  <title>Bablosoft Fingerprint Collection</title>
+  <!-- Load the Bablosoft clientsafe script exactly as given -->
   <script src="//customfingerprints.bablosoft.com/clientsafe.js"></script>
 </head>
 <body>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Make sure ProcessFingerprint is available from clientsafe.js
-    if (typeof ProcessFingerprint === "function") {
-      ProcessFingerprint(
-        false, // Usually controls whether or not a UI is shown (false = no UI)
-        "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", // Your key/ID
-        {
-          // Optional: enable debug logs if the library supports it
-          debug: true,
+// We wrap our code in a DOMContentLoaded event to ensure the script is loaded first
+document.addEventListener("DOMContentLoaded", function() {
 
-          // The important part: a callback to capture the fingerprint data
-          callback: function(fingerprintData) {
-            // Log it for demonstration
-            console.log("Fingerprint data collected:", fingerprintData);
+  // 1. Check if ProcessFingerprint is actually defined
+  if (typeof ProcessFingerprint !== "function") {
+    console.error("ProcessFingerprint is not defined. Check your script URL or loading order.");
+    return;
+  }
 
-            // Optionally, do something with the data:
-            // e.g., send it to your backend for storage or analysis
-            // fetch("https://your-backend.example/collect-fingerprint", {
-            //   method: "POST",
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify(fingerprintData)
-            // })
-            // .then(response => response.json())
-            // .then(serverResponse => console.log("Server response:", serverResponse))
-            // .catch(error => console.error("Error sending to server:", error));
-          }
-        }
-      );
-    } else {
-      console.error("ProcessFingerprint is not defined. Check your script URL or loading order.");
+  // 2. Call ProcessFingerprint with your specific arguments
+  ProcessFingerprint(
+    false,  // "false" usually means 'do not show UI'; might vary by library version
+    "7preeuh7d0au6uq56vp9on0bt73nzabd7ln3oznooo7gr7582rs68ubsz3hobn4s", // Your exact ID/key
+    {
+      debug: true, // If supported, shows debug info in the console
+      callback: function(collectedData) {
+        // 3. This function runs once the fingerprint is ready. Let's log the results.
+        console.log("Fingerprint data collected:", collectedData);
+
+        // ------------------------------------------------------------------------
+        // 4. This is where you can do anything you like with `collectedData`:
+        //    - Send it to your server
+        //    - Store in a database
+        //    - Display it on the page, etc.
+        // ------------------------------------------------------------------------
+
+        // Simple example: Display in an alert (not recommended for production)
+        alert("Collected Fingerprint:\n" + JSON.stringify(collectedData, null, 2));
+
+        // Example of sending data to a backend endpoint (uncomment if needed):
+        /*
+        fetch("https://your-backend.com/collect-fingerprint", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(collectedData)
+        })
+        .then(response => response.json())
+        .then(serverResponse => console.log("Server response:", serverResponse))
+        .catch(error => console.error("Error sending data to server:", error));
+        */
+      }
     }
-  });
+  );
+});
 </script>
 
 </body>
